@@ -19,7 +19,7 @@ test('bridge coalesces synchronous DSH events and releases on disposal', async (
   const agent = {
     id: 'root',
     status: 'idle',
-    session: { events: [] },
+    session: { snapshotEvents: () => [] },
   } as unknown as Agent
 
   bridge.upsert(agent)
@@ -48,4 +48,34 @@ test('bridge coalesces synchronous DSH events and releases on disposal', async (
   await bridge.dispose()
   await bridge.dispose()
   assert.equal(releases, 1)
+})
+
+test('bridge restores pending approvals through the DSH 0.1.6 session snapshot API', async () => {
+  const updates: StateSnapshot[] = []
+  let snapshotReads = 0
+  const bridge = new DshHerdrBridge({
+    update: snapshot => updates.push(snapshot),
+    release: async () => {},
+  })
+  const agent = {
+    id: 'restored',
+    status: 'idle',
+    session: {
+      snapshotEvents: () => {
+        snapshotReads += 1
+        return [{
+          type: 'approval/asked',
+          data: { id: 'restored-approval' },
+        }]
+      },
+    },
+  } as unknown as Agent
+
+  bridge.upsert(agent)
+  await Promise.resolve()
+
+  assert.equal(snapshotReads, 1)
+  assert.equal(updates.at(-1)?.state, 'blocked')
+  assert.equal(updates.at(-1)?.approvalCount, 1)
+  await bridge.dispose()
 })

@@ -26,7 +26,10 @@ export function apply(ctx: Context): void {
 
   for (const agent of ctx.agents.list()) bridge.upsert(agent)
 
-  ctx.on('agent/created', ({ agent }) => bridge.upsert(agent))
+  ctx.on('agent/created', ({ agent }) => {
+    bridge.upsert(agent)
+    return undefined
+  })
   ctx.on('agent/status', ({ agent, status }) => bridge.setStatus(agent.id, status))
   ctx.on('agent/disposed', ({ agent }) => bridge.remove(agent.id))
   ctx.on('session/event', (session, event) => {

@@ -20,7 +20,13 @@ export class DshHerdrBridge {
   }
 
   upsert(agent: Agent): void {
-    this.#tracker.upsert(String(agent.id), agent.status, unresolvedApprovals(agent.session.events))
+    // This is the 0.1.6 compatibility replacement for the removed `events`
+    // property. The complete snapshot is needed to restore pending approvals.
+    this.#tracker.upsert(
+      String(agent.id),
+      agent.status,
+      unresolvedApprovals(agent.session.snapshotEvents()),
+    )
     this.#changed()
   }
 

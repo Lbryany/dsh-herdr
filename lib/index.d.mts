@@ -12,7 +12,7 @@ interface StateSnapshot {
 }
 /** Fold both persisted seed events and live events into unresolved approval ids. */
 declare function unresolvedApprovals(events: readonly SessionEvent[]): Set<string>;
-/** Process-local rollup for every root and child agent hosted by one DSH TUI. */
+/** Process-local rollup for every root and child agent hosted by one DSH process. */
 declare class DshStateTracker {
   #private;
   upsert(agentId: string, status: AgentStatus, approvals?: Iterable<string>): void;

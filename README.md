@@ -1,6 +1,6 @@
 # dsh-herdr
 
-DeepSeek Harness 的 Herdr 状态集成插件。插件运行在 DSH TUI 进程内部，把该进程中的 root agent 与子 agent 聚合成当前 Herdr pane 的语义状态。
+DeepSeek Harness 的 Herdr 状态集成插件。插件运行在承载 DSH Agent 的进程内部，把该进程中的 root agent 与子 agent 聚合成当前 Herdr pane 的语义状态。
 
 ## 状态映射
 
@@ -15,7 +15,7 @@ DeepSeek Harness 的 Herdr 状态集成插件。插件运行在 DSH TUI 进程�
 
 ## 前置要求
 
-- DeepSeek Harness `0.1.0-rc.6`
+- DeepSeek Harness `0.1.6-alpha.2`
 - Node.js `22.19+` 或 `24+`
 - Herdr 管理的 pane（进程环境包含 `HERDR_ENV=1` 与 `HERDR_PANE_ID`）
 
@@ -27,21 +27,28 @@ DeepSeek Harness 的 Herdr 状态集成插件。插件运行在 DSH TUI 进程�
 npm install
 npm run check
 npm pack --ignore-scripts
-dsh plugin --profile tui add ./lbryany-dsh-herdr-0.1.2.tgz
-dsh --profile tui
+dsh plugin --profile headless add ./lbryany-dsh-herdr-0.1.3.tgz
+dsh headless "your task"
 ```
 
-如果 TUI profile 使用其他名字，请替换命令中的 `tui`。
+DSH `0.1.6-alpha.2` 不再内置 `tui` profile。请将插件安装到实际承载 Agent 的同一 profile；上例使用 `headless`，使用其他内置或自定义 profile 时请同时替换安装和启动命令中的 profile 名称。
+
+如果使用长期运行的 Web profile，也可以安装后从 Herdr pane 启动：
+
+```sh
+dsh plugin --profile web add ./lbryany-dsh-herdr-0.1.3.tgz
+dsh web --no-open
+```
 
 发布到 GitHub 后可直接安装：
 
 ```sh
-dsh plugin --profile tui add github:Lbryany/dsh-herdr
+dsh plugin --profile headless add github:Lbryany/dsh-herdr
 ```
 
 ## 验证
 
-在 Herdr pane 内启动 DSH TUI，然后从另一个 pane 查看：
+在 Herdr pane 内启动已安装插件的 DSH profile，然后从另一个 pane 查看：
 
 ```sh
 herdr agent list
@@ -54,7 +61,7 @@ DSH 开始处理消息时应显示 `working`，等待工具审批时显示 `bloc
 - 状态报告通过进程内队列串行执行，并使用跨进程递增的 epoch 微秒 `seq`；同一 pane 重启 DSH 后不会从 `1` 重新计数，也不会被 Herdr 当成旧报告忽略。
 - 同一 DSH 进程复用一条 socket 连接，不为每次状态变化启动 Herdr 子进程。
 - Socket 请求默认 3 秒超时；失败时回退 CLI，两条路径都失败才记录警告，不阻塞 DSH agent。
-- 多个 DSH TUI 进程分别继承自己的 `HERDR_PANE_ID`，无需跨进程协调。
+- 多个 DSH profile 进程分别继承自己的 `HERDR_PANE_ID`，无需跨进程协调。
 
 ## License
 

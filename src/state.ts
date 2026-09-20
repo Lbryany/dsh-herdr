@@ -46,7 +46,7 @@ export function unresolvedApprovals(events: readonly SessionEvent[]): Set<string
   return pending
 }
 
-/** Process-local rollup for every root and child agent hosted by one DSH TUI. */
+/** Process-local rollup for every root and child agent hosted by one DSH process. */
 export class DshStateTracker {
   readonly #agents = new Map<string, TrackedAgent>()
 
