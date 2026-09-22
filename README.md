@@ -15,7 +15,7 @@ DeepSeek Harness 的 Herdr 状态集成插件。插件运行在承载 DSH Agent 
 
 ## 前置要求
 
-- DeepSeek Harness `0.1.6-alpha.2`
+- DeepSeek Harness `0.1.5-alpha.1` 起。`0.1.5-rc.1` / `0.1.5-rc.2` 与 `0.1.6-alpha.2` 均已实测可用（Windows 11、Node.js 24.13.0、Herdr 0.9.0）
 - Node.js `22.19+` 或 `24+`
 - Herdr 管理的 pane（进程环境包含 `HERDR_ENV=1` 与 `HERDR_PANE_ID`）
 
