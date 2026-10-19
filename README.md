@@ -1,3 +1,6 @@
+> **已迁移（2026-10-19）**：本仓库已归档，只读。后续开发与发布都在 [Lbryany/dsh-plugins/packages/dsh-herdr](https://github.com/Lbryany/dsh-plugins/tree/main/packages/dsh-herdr)。
+> **Moved (2026-10-19)**: this repository is archived; development and releases continue at [Lbryany/dsh-plugins/packages/dsh-herdr](https://github.com/Lbryany/dsh-plugins/tree/main/packages/dsh-herdr).
+
 # dsh-herdr
 
 DeepSeek Harness 的 Herdr 状态集成插件。插件运行在承载 DSH Agent 的进程内部，把该进程中的 root agent 与子 agent 聚合成当前 Herdr pane 的语义状态。
